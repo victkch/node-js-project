@@ -1,16 +1,18 @@
 import { Player } from "./Player";
 class Warrior implements Player {
+  readonly name: string;
   health: number;
-  constructor() {
+  constructor(name: string) {
+    this.name = name;
     this.health = 200;
   }
-  setHealth(health:number){
-    this.health=health;
-  }
-  attack(): void {
-    console.log("Takes 50hp.");
+  attack(whoGetsAttacked: Player): void {
+    console.log(
+      `${this.name} hit with a sword and took 50hp of ${whoGetsAttacked.name}.`
+    );
   }
   ability(): void {
-    console.log("Protect yourself with a shield.");
+    console.log(`${this.name} protects themselves with a shield.`);
   }
 }
+export { Warrior };

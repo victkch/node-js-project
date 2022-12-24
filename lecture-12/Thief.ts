@@ -1,16 +1,18 @@
 import { Player } from "./Player";
 class Thief implements Player {
+  readonly name: string;
   health: number;
-  constructor() {
+  constructor(name: string) {
+    this.name = name;
     this.health = 100;
   }
-  setHealth(health:number){
-    this.health=health;
-  }
-  attack(): void {
-    console.log("Takes 25hp.");
+  attack(whoGetsAttacked: Player): void {
+    console.log(
+      `${this.name} shot a bow and took 25hp of ${whoGetsAttacked.name}.`
+    );
   }
   ability(): void {
-    console.log("Runs away.");
+    console.log(`${this.name} runs away.`);
   }
 }
+export { Thief };
