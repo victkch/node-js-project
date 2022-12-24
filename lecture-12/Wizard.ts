@@ -1,16 +1,20 @@
 import { Player } from "./Player";
 class Wizard implements Player {
+  readonly name: string;
   health: number;
-  constructor() {
+  constructor(name: string) {
+    this.name = name;
     this.health = 80;
   }
-  setHealth(health:number){
-    this.health=health;
+  attack(whoGetsAttacked: Player): void {
+    console.log(
+      `${this.name} shot a fireball and took 100hp of ${whoGetsAttacked.name}.`
+    );
   }
-  attack(): void {
-    console.log("Takes 100hp.");
-  }
-  ability(): void {
-    console.log("Chosen opponent can do nothing.");
+  ability(whoCantUseTheirsAbility: Player): void {
+    console.log(
+      `${this.name} put a spell on ${whoCantUseTheirsAbility.name}, now they can do nothing.`
+    );
   }
 }
+export { Wizard };
