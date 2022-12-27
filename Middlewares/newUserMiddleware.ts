@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const newUserMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const newUserMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const userName = req.body.name;
   const userEmail = req.body.email;
   const password = req.body.password;

@@ -1,41 +1,28 @@
-import { loginMiddleware } from "../Middlewares/loginMiddleware";
-import { newUserMiddleware } from "../Middlewares/newUserMiddleware";
-import { updateUserMiddleware } from "../Middlewares/updateUserMiddleware";
-import { Controller, Router } from "./Controller";
 import { Request, Response, NextFunction } from "express";
+import { UserService } from "../Services/UserService";
 
-class UserController implements Controller {
-  public path = "/users";
-  public router = Router();
-
-  constructor() {
-    this.router.post(`${this.path}/login`, loginMiddleware, this.login);
-    this.router.post(`${this.path}/newUser`, newUserMiddleware, this.register);
-    this.router.put(
-      `${this.path}/update/:userId`,
-      updateUserMiddleware,
-      this.update
-    );
-    this.router.post(`${this.path}/passwordReset`, this.passwordReset);
-  }
-
+class UserController {
   public login = (req: Request, res: Response, next: NextFunction): void => {
+    UserService.createJWTToken(req.body.email);
+    res.send("This is your token");
     //jwt token
   };
 
   public register = (req: Request, res: Response, next: NextFunction): void => {
+    UserService.createUser(req.body.name);
+    res.send("You registered");
     //return a user
   };
 
   public update = (req: Request, res: Response, next: NextFunction): void => {
+    UserService.updateUser(req.body.newName);
+    res.send("Your info has been updated");
     //return updated user
   };
 
-  public passwordReset = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): void => {
+  public passwordReset = (req: Request, res: Response, next: NextFunction): void => {
+    UserService.createUser(req.body.name);
+    res.send("You have created a new account");
     //reset password
   };
 }
