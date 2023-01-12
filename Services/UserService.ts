@@ -1,13 +1,13 @@
 class UserService {
-  static createJWTToken(userEmail) {
+  public createJWTToken(userEmail) {
     // return jwt token
     console.log(`Created JWT Token for user - ${userEmail}`);
   }
-  static createUser(name) {
+  public createUser(name) {
     // return a user
     console.log(`Created new user - ${name}`);
   }
-  static updateUser(name) {
+  public updateUser(name) {
     // return updated user
     console.log(`Updated user's info - ${name}`);
   }
