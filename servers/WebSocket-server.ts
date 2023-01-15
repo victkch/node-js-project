@@ -1,47 +1,60 @@
 import { parse } from "path";
+import { Request } from "express";
 import { EventsController } from "../Controllers/EventsController";
-import { actionTypeMiddleware } from "../Middlewares/eventsMiddleware";
+import { eventsMiddleware } from "../Middlewares/eventsMiddleware";
 import { httpServer } from "./HTTP-server";
+import { isTokenProvided } from "../Errors/WebSocket errors/checkToken";
+import { CheckMessagesFormat } from "../Errors/WebSocket errors/CheckIncomingMessage";
 
 const webSocket = require("ws");
 const webSocketServer = new webSocket.Server({ server: httpServer });
 
 const eventController = new EventsController();
+const messageChecker = new CheckMessagesFormat();
 const connectedUsers: typeof webSocket[] = [];
+const connectedUserNames: string[] = [];
 
-webSocketServer.on("connection", (ws: typeof webSocket, req) => {
+webSocketServer.on("connection", async (ws: typeof webSocket, req: Request) => {
   let userToken: string = parse(req.url).base;
-  eventController.connection(userToken);
-
-  connectedUsers.push(ws);
-  connectedUsers.forEach((user) => {
-    if (user !== ws) {
-      user.send(`user${userToken} has connected.`);
-    }
-  });
-  console.log("Count of connected users: " + connectedUsers.length);
-
-  ws.on("close", () => {
-    eventController.disconnection();
-    let indexOfUser = connectedUsers.indexOf(ws);
-    connectedUsers.splice(indexOfUser, 1);
-    connectedUsers.forEach((user) => {
-      if (user !== ws) {
-        user.send(`user${userToken} has disconnected.`);
-      }
+  let userName: string, tokenParts: string[];
+  await isTokenProvided(userToken)
+    .then((res) => {
+      tokenParts = userToken.split(".");
+      userName = tokenParts[2].substring(2, 6).toUpperCase();
+    })
+    .then((res) => eventController.connection(userToken, ws, userName))
+    .then((res) =>
+      ws.on("close", () => eventController.disconnection(ws, userName))
+    )
+    .catch((err) => {
+      ws.send("Invalid token");
+      ws.close();
     });
-    console.log(
-      `user${userToken} has disconnected. Count of connected users: ${connectedUsers.length}.`
-    );
-  });
-
   ws.on("message", async (recievedMessage: string) => {
-    let message: object = JSON.parse(recievedMessage);
-    await actionTypeMiddleware(message["type"]).catch((err) =>
-      ws.send("error")
-    );
-    eventController.action(message, ws, userToken);
+    let message: any = await messageChecker
+      .isMessageJSON(recievedMessage)
+      .catch((err) => ws.send("Your message is not a JSON"));
+    let eventType: any = "";
+    if (message) {
+      await messageChecker
+        .checkTypeProperty(message)
+        .catch((err) => ws.send(`${err}`))
+        .then((res) => {
+          if (res) {
+            eventType = message["type"];
+            eventsMiddleware(eventType).catch((err) => ws.send(`${err}`));
+          }
+        });
+      await messageChecker
+        .checkEventProperties(eventType, message)
+        .catch((err) => ws.send(`${err}`))
+        .then((res) => {
+          if (res) {
+            eventController.action(message);
+          }
+        });
+    }
   });
 });
 
-export { webSocket, connectedUsers };
+export { webSocket, connectedUsers, connectedUserNames };
