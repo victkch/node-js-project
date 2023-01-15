@@ -1,5 +1,5 @@
 class ClassService {
-  static returnClasses() {
+  public returnClasses() {
     //return classes
     console.log("These are all available classes");
   }
