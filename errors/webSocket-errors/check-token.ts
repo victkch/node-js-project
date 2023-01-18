@@ -1,4 +1,4 @@
-import { jwt, jwtKey } from "../../Services/UserService";
+import { jwt, jwtKey } from "../../services/user-service";
 
 const isTokenProvided = (token: string) => {
   return new Promise((res, rej) => {

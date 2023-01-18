@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "./player";
 class Wizard implements Player {
   readonly name: string;
   health: number;

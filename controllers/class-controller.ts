@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ClassService } from "../Services/ClassService";
+import { ClassService } from "../services/class-service";
 
 class ClassController {
   public classService = new ClassService();

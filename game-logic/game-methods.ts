@@ -1,5 +1,5 @@
-import { Player } from "./Player";
-import { ReturnAPlayer } from "./ReturnAPlayer";
+import { Player } from "./player";
+import { ReturnAPlayer } from "./return-a-player";
 
 class GameMethods {
   static createAPlayer(playerType: number, playerName: string): Player {

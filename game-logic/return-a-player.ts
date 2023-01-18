@@ -1,7 +1,7 @@
-import { Player } from "./Player";
-import { Thief } from "./Thief";
-import { Warrior } from "./Warrior";
-import { Wizard } from "./Wizard";
+import { Player } from "./player";
+import { Thief } from "./thief";
+import { Warrior } from "./warrior";
+import { Wizard } from "./wizard";
 enum PlayerType {
   Thief = 1,
   Warrior,

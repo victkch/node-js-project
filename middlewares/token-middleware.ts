@@ -1,7 +1,7 @@
 import { parse } from "path";
 import { Request, Response, NextFunction } from "express";
-import { DisplayError } from "../Errors/HTTP errors/DisplayError";
-import { jwt, jwtKey } from "../Services/UserService";
+import { DisplayError } from "../errors/http-errors/display-error";
+import { jwt, jwtKey } from "../services/user-service";
 
 const showErr = new DisplayError();
 
