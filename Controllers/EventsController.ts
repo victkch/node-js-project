@@ -1,63 +1,42 @@
-import { ActionType } from "../Middlewares/eventsMiddleware";
-import { webSocket } from "../servers/WebSocket-server";
+import { EventType } from "../Middlewares/eventsMiddleware";
 import { EventsService } from "../Services/EventsService";
+import { webSocket } from "../servers/WebSocket-server";
+import { tokenValidation } from "../Errors/WebSocket errors/checkToken";
 
 class EventsController {
-  public eventService=new EventsService();
+  public eventService = new EventsService();
 
-  public connection = (jwtToken: string) => {
-    //    if(this.tokenValidation(jwtToken)) {
-    //     this.createMogoDB();
-    //     this.prevMessages();
-    //    }
-    //    else error
-    console.log(`user${jwtToken} connected`);
+  public connection = async (
+    jwtToken: string,
+    ws: typeof webSocket,
+    userName: string
+  ) => {
+    await tokenValidation(jwtToken).then((res) => {
+      this.eventService.createMogoDBsession();
+      this.eventService.notifyAndSendUsers(userName, ws, "connect");
+      this.eventService.prevMessages();
+    });
   };
-  public tokenValidation(jwtToken: string) {
-    // if(){
-    //     token validation
-    //     return true;
-    // }
-    //  else return false;
+  public disconnection(ws: typeof webSocket, userName: string) {
+    this.eventService.deleteMogoDBsession();
+    this.eventService.notifyAndSendUsers(userName, ws, "disconnect");
   }
-  public createMogoDB() {
-    //creatre mongodb session
-    console.log("created mongodb session");
-  }
-  public prevMessages() {
-    //send 10 previous messages
-    console.log("sent 10 messages");
-  }
-  public disconnection() {
-    //delete session
-    console.log("session deleted");
-  }
-  public action(message: object, ws: typeof webSocket, userToken: string) {
-    let actionType: string = message["type"];
-    switch (actionType) {
-      case ActionType.attack:
-        this.eventService.attack(message["number"]);
+  public action(eventMessage: any) {
+    let eventType: string = eventMessage["type"];
+    switch (eventType) {
+      case EventType.attack:
+        this.eventService.attack(eventMessage["userId"]);
         break;
-      case ActionType.ability:
-        this.eventService.ability(message["number"]);
+      case EventType.ability:
+        this.eventService.ability(eventMessage["userId"]);
         break;
-      case ActionType.message:
-        // if(this.canUserSendMwssage()){
-        // this.eventService.message(message["message"], ws, userToken);
-        // }
-        // else //user cannot send messages
+      case EventType.message:
+        this.eventService.message(eventMessage["message"]);
         break;
-      case ActionType.restore:
+      case EventType.restore:
         this.eventService.restore();
         break;
     }
-  }
-  public canUserSendMwssage(){
-    // if(){
-    //     //user can send messages
-    //     return true;
-    // }
-    // else return false;
   }
 }
 

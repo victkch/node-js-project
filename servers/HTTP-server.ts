@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { loginMiddleware } from "../Middlewares/loginMiddleware";
-import { newUserMiddleware } from "../Middlewares/newUserMiddleware";
-import { updateUserMiddleware } from "../Middlewares/updateUserMiddleware";
 import { ClassController } from "../Controllers/ClassController";
 import { UserController } from "../Controllers/UserController";
+import { JSONchecker } from "../Errors/HTTP errors/CheckJSONmessage";
+import { tokenMiddleware } from "../Middlewares/tokenMiddleware";
 
 const express = require("express");
 const http = require("http");
@@ -12,14 +12,33 @@ const router = Router();
 
 const classController = new ClassController();
 const userController = new UserController();
+const jsonCheckFormat = new JSONchecker();
 
 app.use(express.json());
 app.use(router);
 
-router.post("/login", loginMiddleware, userController.login);
-router.post("/newUser", newUserMiddleware, userController.register);
-router.put("/update/:userId", updateUserMiddleware, userController.update);
-router.post("/passwordReset", userController.passwordReset);
+router.post(
+  "/login",
+  jsonCheckFormat.checkLoginInfo,
+  loginMiddleware,
+  userController.login
+);
+router.post(
+  "/newUser",
+  jsonCheckFormat.checkRegisterInfo,
+  userController.register
+);
+router.put(
+  "/update/:userToken",
+  tokenMiddleware,
+  jsonCheckFormat.checkUpdateInfo,
+  userController.update
+);
+router.post(
+  "/passwordReset",
+  jsonCheckFormat.checkRegisterInfo,
+  userController.passwordReset
+);
 router.get("/classes", classController.showClasses);
 
 const httpServer = http.createServer(app);
