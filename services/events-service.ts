@@ -2,7 +2,8 @@ import {
   connectedUserNames,
   connectedUsers,
   webSocket,
-} from "../servers/WebSocket-server";
+} from "../servers/webSocket-server";
+import { EventType } from "../middlewares/events-middleware";
 
 class EventsService {
   public createMogoDBsession() {
@@ -51,6 +52,23 @@ class EventsService {
   }
   public restore() {
     console.log("restore");
+  }
+  public chooseAction(eventMessage: any) {
+    let eventType: string = eventMessage["type"];
+    switch (eventType) {
+      case EventType.attack:
+        this.attack(eventMessage["userId"]);
+        break;
+      case EventType.ability:
+        this.ability(eventMessage["userId"]);
+        break;
+      case EventType.message:
+        this.message(eventMessage["message"]);
+        break;
+      case EventType.restore:
+        this.restore();
+        break;
+    }
   }
 }
 export { EventsService };

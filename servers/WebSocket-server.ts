@@ -1,10 +1,10 @@
 import { parse } from "path";
 import { Request } from "express";
-import { EventsController } from "../Controllers/EventsController";
-import { eventsMiddleware } from "../Middlewares/eventsMiddleware";
-import { httpServer } from "./HTTP-server";
-import { isTokenProvided } from "../Errors/WebSocket errors/checkToken";
-import { CheckMessagesFormat } from "../Errors/WebSocket errors/CheckIncomingMessage";
+import { EventsController } from "../controllers/events-controller";
+import { eventsMiddleware } from "../middlewares/events-middleware";
+import { httpServer } from "./http-server";
+import { isTokenProvided } from "../errors/webSocket-errors/check-token";
+import { CheckMessagesFormat } from "../errors/webSocket-errors/check-incoming-message";
 
 const webSocket = require("ws");
 const webSocketServer = new webSocket.Server({ server: httpServer });

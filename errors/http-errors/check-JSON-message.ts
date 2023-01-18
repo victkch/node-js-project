@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { DisplayError } from "./DisplayError";
+import { DisplayError } from "./display-error";
 
 const showErr = new DisplayError();
 

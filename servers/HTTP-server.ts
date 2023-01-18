@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { loginMiddleware } from "../Middlewares/loginMiddleware";
-import { ClassController } from "../Controllers/ClassController";
-import { UserController } from "../Controllers/UserController";
-import { JSONchecker } from "../Errors/HTTP errors/CheckJSONmessage";
-import { tokenMiddleware } from "../Middlewares/tokenMiddleware";
+import { loginMiddleware } from "../middlewares/login-middleware";
+import { ClassController } from "../controllers/class-controller";
+import { UserController } from "../controllers/user-controller";
+import { JSONchecker } from "../errors/http-errors/check-JSON-message";
+import { tokenMiddleware } from "../middlewares/token-middleware";
 
 const express = require("express");
 const http = require("http");

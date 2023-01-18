@@ -1,4 +1,4 @@
-import { EventType } from "../../Middlewares/eventsMiddleware";
+import { EventType } from "../../middlewares/events-middleware";
 
 class CheckMessagesFormat {
   public isMessageJSON(message: string) {
