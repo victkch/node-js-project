@@ -42,7 +42,7 @@ router.post(
 router.get("/classes", classController.showClasses);
 
 const httpServer = http.createServer(app);
-httpServer.listen(8080, () => {
+httpServer.listen(3000, () => {
   console.log("The HTTP-server started.");
 });
 
