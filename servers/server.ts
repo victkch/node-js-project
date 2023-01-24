@@ -5,10 +5,19 @@ import { UserController } from "../controllers/user-controller";
 import { JSONchecker } from "../errors/http-errors/check-JSON-message";
 import { tokenMiddleware } from "../middlewares/token-middleware";
 
+const Pool = require("pg").Pool;
 const express = require("express");
 const http = require("http");
 const app = express();
 const router = Router();
+
+const pool = new Pool({
+  user: "viktoriiakocherha",
+  host: "localhost",
+  database: "postgres",
+  password: "",
+  port: 8080,
+});
 
 const classController = new ClassController();
 const userController = new UserController();
@@ -34,11 +43,7 @@ router.put(
   jsonCheckFormat.checkUpdateInfo,
   userController.update
 );
-router.post(
-  "/passwordReset",
-  jsonCheckFormat.checkRegisterInfo,
-  userController.passwordReset
-);
+router.post("/passwordReset", userController.passwordReset);
 router.get("/classes", classController.showClasses);
 
 const httpServer = http.createServer(app);
@@ -46,4 +51,4 @@ httpServer.listen(3000, () => {
   console.log("The HTTP-server started.");
 });
 
-export { httpServer };
+export { httpServer, pool };

@@ -36,7 +36,9 @@ class JSONchecker {
       req.body.copyPassword !== null &&
       req.body.classId !== null
     ) {
-      next();
+      if (req.body.password === req.body.copyPassword) {
+        next();
+      } else next(showErr.infoNotFound(res, "Passwords do not match"));
     } else next(showErr.wrongFormatError(res, "registration"));
   };
 
@@ -57,7 +59,9 @@ class JSONchecker {
       req.body.copyPassword !== null &&
       req.body.newClassId !== null
     ) {
-      next();
+      if (req.body.newPassword === req.body.copyPassword) {
+        next();
+      } else next(showErr.infoNotFound(res, "Passwords do not match"));
     } else next(showErr.wrongFormatError(res, "update"));
   };
 }

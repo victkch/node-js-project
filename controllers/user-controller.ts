@@ -4,37 +4,19 @@ import { UserService } from "../services/user-service";
 class UserController {
   public userService = new UserService();
 
-  public login = (req: Request, res: Response): Response => {
-    //create mongodb session
-    let usersJWTtoken: string = this.userService.createJWTtoken(req.body.email);
-    return res.status(200).json({
-      success: true,
-      message: "Your token was generated",
-      token: usersJWTtoken,
-    });
+  public login = (req: Request, res: Response) => {
+    this.userService.createJWTtoken(res, req.body.email);
   };
-
-  public register = (req: Request, res: Response): Response => {
-    // this.userService.createUser(req.body.name);
-    return res.status(200).json({
-      success: true,
-      message: "You successfully registered",
-    });
+  public register = (req: Request, res: Response) => {
+    this.userService.createUser(res, req.body);
   };
-
-  public update = (req: Request, res: Response): Response => {
-    //this.userService.updateUser(req.body.newName);
-    return res.status(200).json({
-      success: true,
-      message: "Your info was successfully updated",
-    });
+  public update = (req: Request, res: Response) => {
+    this.userService.updateUser(res, req.body);
   };
-
-  public passwordReset = (req: Request, res: Response): Response => {
-    // this.userService.createUser(req.body.name);
-    return res.status(200).json({
+  public passwordReset = (req: Request, res: Response) => {
+    res.status(200).json({
       success: true,
-      message: "You have created a new account",
+      message: "You have to create a new account",
     });
   };
 }
