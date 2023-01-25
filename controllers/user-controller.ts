@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/user-service";
+import { UserService } from '../services/user-service';
 
 class UserController {
   public userService = new UserService();
@@ -7,6 +7,7 @@ class UserController {
   public login = (req: Request, res: Response) => {
     this.userService.createJWTtoken(res, req.body.email);
   };
+
   public register = (req: Request, res: Response) => {
     this.userService.createUser(res, req.body);
   };
