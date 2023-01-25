@@ -1,32 +1,28 @@
-class UserQuery {
-  public findUser(userName: string, email: string): string {
-    return (
-      `SELECT username,email,class_id FROM users ` +
-      `WHERE username=${userName} AND email=${email}`
-    );
+class UserRepository {
+  public findUser(): string {
+    return `SELECT id,email,password FROM users WHERE email=$1 AND password=$2`;
   }
-  public addUser(
-    id: number,
-    userName: string,
-    email: string,
-    password: string,
-    classId: number
-  ): string {
+  public findUserByName(): string {
+    return `SELECT username FROM users WHERE username=$1`;
+  }
+  public addUser(): string {
     return (
       `INSERT INTO users (id, username, email, password, class_id,created_at,updated_at) ` +
-      `VALUES (${id},${userName},${email},${password},${classId},${new Date()},${new Date()})`
+      `VALUES ((select max(id) from users)+1,$1,$2,$3,$4,$5,$6) ` +
+      `RETURNING *`
     );
   }
-  public updateUser(
-    id: number,
-    userName: string,
-    password: string,
-    classId: number
-  ) {
+  public updateUser(): string {
     return (
       `UPDATE users ` +
-      `SET username=${userName}, password=${password}, class_id=${classId},updated_at=${new Date()} ` +
-      `WHERE id='${id}`
+      `SET username=$1, password=$2, class_id=$3,updated_at=$4 ` +
+      `WHERE id=$5 ` +
+      `RETURNING *`
     );
   }
+  public findUserByPassword(): string {
+    return `SELECT id FROM users WHERE password=$1`;
+  }
 }
+
+export { UserRepository };

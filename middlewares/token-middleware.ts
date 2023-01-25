@@ -11,9 +11,9 @@ const tokenMiddleware = (
   next: NextFunction
 ): void => {
   let userToken: string = parse(req.url).base;
-  jwt.verify(userToken, jwtKey, function (err: Error) {
+  jwt.verify(userToken, jwtKey, function (err: Error, decoded: any) {
     if (err) {
-      next(showErr.infoNotFound(res, "Token"));
+      next(showErr.infoNotFound(res, "Token not found"));
     } else next();
   });
 };

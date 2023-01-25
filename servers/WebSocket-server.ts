@@ -2,7 +2,7 @@ import { parse } from "path";
 import { Request } from "express";
 import { EventsController } from "../controllers/events-controller";
 import { eventsMiddleware } from "../middlewares/events-middleware";
-import { httpServer } from "./http-server";
+import { httpServer } from "./server";
 import { isTokenProvided } from "../errors/webSocket-errors/check-token";
 import { CheckMessagesFormat } from "../errors/webSocket-errors/check-incoming-message";
 

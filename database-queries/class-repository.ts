@@ -1,5 +1,7 @@
-class ClassQuery {
+class ClassRepository {
   public returnAllClasses(): string {
-    return `SELECT name,health,damage,attack_type,ability FROM classes`;
+    return `SELECT id,name,health,damage,attack_type,ability FROM classes`;
   }
 }
+
+export { ClassRepository };
