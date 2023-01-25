@@ -1,5 +1,5 @@
 import { EventsService } from "../services/events-service";
-import { webSocket } from "../servers/webSocket-server";
+import { webSocket } from "../servers/ws-server";
 import { tokenValidation } from "../errors/webSocket-errors/check-token";
 
 class EventsController {

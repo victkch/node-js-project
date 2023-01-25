@@ -120,4 +120,5 @@ class UserService {
     });
   }
 }
+
 export { UserService, jwt, jwtKey };

@@ -2,7 +2,7 @@ import {
   connectedUserNames,
   connectedUsers,
   webSocket,
-} from "../servers/webSocket-server";
+} from "../servers/ws-server";
 import { EventType } from "../middlewares/events-middleware";
 
 class EventsService {
