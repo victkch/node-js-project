@@ -14,7 +14,10 @@ const tokenMiddleware = (
   jwt.verify(userToken, jwtKey, function (err: Error, decoded: any) {
     if (err) {
       next(showErr.infoNotFound(res, "Token not found"));
-    } else next();
+    } else {
+      req.body.userId = decoded["id"];
+      next();
+    }
   });
 };
 
