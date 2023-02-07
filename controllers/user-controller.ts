@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
-import { UserService } from '../services/user-service';
+import { UserService } from "../services/user-service";
+
+const userService = new UserService();
 
 class UserController {
-  public userService = new UserService();
-
   public login = (req: Request, res: Response) => {
-    this.userService.createJWTtoken(res, req.body.email);
+    userService.createJWTtoken(res, req.body);
   };
-
   public register = (req: Request, res: Response) => {
-    this.userService.createUser(res, req.body);
+    userService.createUser(res, req.body);
   };
   public update = (req: Request, res: Response) => {
-    this.userService.updateUser(res, req.body);
+    userService.updateUser(res, req.body, req.body.userId);
   };
   public passwordReset = (req: Request, res: Response) => {
     res.status(200).json({

@@ -9,10 +9,12 @@ const isTokenProvided = (token: string) => {
 };
 const tokenValidation = (jwtToken: string) => {
   return new Promise((res, rej) => {
-    jwt.verify(jwtToken, jwtKey, function (err: Error) {
+    jwt.verify(jwtToken, jwtKey, function (err: Error, decoded: any) {
       if (err) {
         rej(false);
-      } else res(true);
+      } else {
+        res([decoded["id"], decoded["name"], decoded["class_id"]]);
+      }
     });
   });
 };

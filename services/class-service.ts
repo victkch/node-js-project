@@ -1,21 +1,23 @@
-import { ClassRepository } from "../database-queries/class-repository";
-import { DisplayResult } from "../database-responses/displayResult";
-import { pool } from "../servers/server";
+import { ClassRepository } from "../database/class-repository-pg";
+import { DisplayResult } from "../errors/database-errors/displayResult";
+import { dbConnect } from "../servers/server";
+
+const classQuery = new ClassRepository();
+const displayRes = new DisplayResult();
 
 class ClassService {
-  public classQuery = new ClassRepository();
-
   public returnClasses(response: any) {
-    let displayRes = new DisplayResult();
     let message: string = "All available classes";
-    let queryString = this.classQuery.returnAllClasses();
-    pool.query(queryString, (err: Error, results: any) => {
-      if (err) {
-        message = "Error. Cannot display classes";
-        return displayRes.displayResult(response, 404, message);
-      } else
-        return displayRes.displayResult(response, 200, message, results.rows);
-    });
+    let queryString = classQuery.returnAllClasses();
+    dbConnect
+      .postgresqlConnect()
+      .query(queryString, (err: Error, results: any) => {
+        if (err) {
+          message = "Error. Cannot display classes";
+          return displayRes.displayResult(response, 404, message);
+        } else
+          return displayRes.displayResult(response, 200, message, results.rows);
+      });
   }
 }
 

@@ -1,6 +1,9 @@
 class UserRepository {
   public findUser(): string {
-    return `SELECT id,email,password FROM users WHERE email=$1 AND password=$2`;
+    return (
+      `SELECT id,username,email,password,class_id ` +
+      `FROM users WHERE email=$1 AND password=$2`
+    );
   }
   public findUserByName(): string {
     return `SELECT username FROM users WHERE username=$1`;
@@ -19,9 +22,6 @@ class UserRepository {
       `WHERE id=$5 ` +
       `RETURNING *`
     );
-  }
-  public findUserByPassword(): string {
-    return `SELECT id FROM users WHERE password=$1`;
   }
 }
 

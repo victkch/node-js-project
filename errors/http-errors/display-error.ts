@@ -1,7 +1,7 @@
 import { Response } from "express";
 
 class DisplayError {
-  public wrongFormatError(res: Response, additionalInfo?: string) {
+  public wrongFormatError(res: Response, additionalInfo: string) {
     let dataFormat: string = "";
     switch (additionalInfo) {
       case "login":
